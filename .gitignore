@@ -1,0 +1,12 @@
+# Virtual environment -- regenerate from requirements.txt, never commit this
+venv/
+
+# Runtime-generated, not source
+logs/
+__pycache__/
+*.pyc
+
+# Live operational config -- contains real lastRun dates and your actual
+# schedule, not something to version. Keep sprinkles-config.example.json
+# tracked instead as the schema reference.
+sprinkles-config.json

@@ -1,0 +1,25 @@
+# Install at /etc/systemd/system/sprinkles.service
+#
+# Paths below assume your username is "pi" with home directory /home/pi.
+# If getent passwd pi shows something different, adjust both paths below
+# to match. (We use a hardcoded path here rather than systemd's %h
+# specifier -- on some systemd versions %h doesn't reliably resolve
+# against the configured User= for system-level units, and resolves to
+# root's home instead.)
+
+[Unit]
+Description=Sprinkles irrigation controller
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/sprinkles
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/pi/sprinkles/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=3
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

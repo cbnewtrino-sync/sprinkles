@@ -1,0 +1,24 @@
+{% for zone in zones %}
+<form class="zone-edit-row"
+      hx-post="/config/zones/{{ zone.name }}"
+      hx-trigger="change"
+      hx-target="#zone-editor"
+      hx-swap="innerHTML settle:600ms">
+  <div class="zone-name">{{ zone.name }}</div>
+
+  <label class="field checkbox-field">
+    <input type="checkbox" name="enabled" {% if zone.enabled %}checked{% endif %}>
+    Enabled
+  </label>
+
+  <label class="field">
+    <span>Interval (days)</span>
+    <input type="number" name="interval" min="1" value="{{ zone.interval }}">
+  </label>
+
+  <label class="field">
+    <span>Duration (min)</span>
+    <input type="number" name="duration" min="1" value="{{ zone.duration }}">
+  </label>
+</form>
+{% endfor %}

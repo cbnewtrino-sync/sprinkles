@@ -1,0 +1,30 @@
+<form hx-post="/config/settings/water-tod" hx-trigger="change" hx-target="#settings" hx-swap="innerHTML settle:600ms">
+  <label class="field">
+    <span>Water time</span>
+    <span class="time-row">
+      <input type="time" name="water_tod" value="{{ config.water_tod.strftime('%H:%M') }}">
+      <span class="time-readout">{{ config.water_tod.strftime('%I:%M %p') }}</span>
+    </span>
+  </label>
+</form>
+
+<div class="delay-control">
+  <div class="zone-meta">
+    {% if config.delay_day %}Delayed until {{ config.delay_day }}{% else %}No delay set{% endif %}
+  </div>
+  <div class="delay-actions">
+    <form hx-post="/config/settings/delay" hx-target="#settings" hx-swap="innerHTML settle:600ms">
+      <input type="hidden" name="days" value="3">
+      <button class="secondary" type="submit">Delay 3 days</button>
+    </form>
+    <form hx-post="/config/settings/delay" hx-target="#settings" hx-swap="innerHTML settle:600ms">
+      <input type="hidden" name="days" value="7">
+      <button class="secondary" type="submit">Delay 7 days</button>
+    </form>
+    {% if config.delay_day %}
+    <form hx-post="/config/settings/delay/clear" hx-target="#settings" hx-swap="innerHTML settle:600ms">
+      <button class="warn" type="submit">Clear delay</button>
+    </form>
+    {% endif %}
+  </div>
+</div>

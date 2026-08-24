@@ -1,0 +1,56 @@
+{% for zone in zones %}
+<div class="zone-row {{ 'running' if active_zone == zone.name else '' }} {{ 'disabled' if not zone.enabled else '' }}">
+  <div class="zone-name">{{ zone.name }}</div>
+
+  {% if active_zone == zone.name %}
+    <button
+      class="warn"
+      hx-post="/zones/off"
+      hx-target="#zone-list"
+      hx-swap="innerHTML">
+      Turn Off
+    </button>
+  {% elif not zone.enabled and active_zone %}
+    <button
+      class="secondary"
+      hx-post="/zones/{{ zone.name }}/on"
+      hx-target="#zone-list"
+      hx-swap="innerHTML"
+      hx-confirm="{{ zone.name }} is disabled and won't run automatically. Also, {{ active_zone }} is currently running and will be stopped. Turn on {{ zone.name }} anyway?">
+      Turn On
+    </button>
+  {% elif not zone.enabled %}
+    <button
+      class="secondary"
+      hx-post="/zones/{{ zone.name }}/on"
+      hx-target="#zone-list"
+      hx-swap="innerHTML"
+      hx-confirm="{{ zone.name }} is disabled and won't run automatically. Turn it on anyway?">
+      Turn On
+    </button>
+  {% elif active_zone %}
+    <button
+      class="secondary"
+      hx-post="/zones/{{ zone.name }}/on"
+      hx-target="#zone-list"
+      hx-swap="innerHTML"
+      hx-confirm="{{ active_zone }} is currently running. Stop it and start {{ zone.name }} instead?">
+      Turn On
+    </button>
+  {% else %}
+    <button
+      hx-post="/zones/{{ zone.name }}/on"
+      hx-target="#zone-list"
+      hx-swap="innerHTML">
+      Turn On
+    </button>
+  {% endif %}
+
+  <div class="zone-meta">
+    {{ zone.duration }} min every {{ zone.interval }}d &middot; last run {{ zone.last_run or "never" }}
+  </div>
+  <span class="status-pill {{ 'running' if active_zone == zone.name else '' }}">
+    {% if active_zone == zone.name %}Running{% elif not zone.enabled %}Disabled{% else %}Idle{% endif %}
+  </span>
+</div>
+{% endfor %}

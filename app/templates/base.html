@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sprinkles{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js"></script>
+</head>
+<body>
+  <div class="instrument-strip">
+    <div class="instrument-strip-inner">
+      <div class="brand-block">
+        <span class="brand-title">Sprinkles</span>
+        <span class="brand-subtitle">Irrigation Controller</span>
+      </div>
+      <span class="reading">{% block strip_reading %}{% endblock %}</span>
+    </div>
+  </div>
+  <nav class="nav-row">
+    <a href="/" class="{{ 'active' if active_nav == 'status' else '' }}">Status</a>
+    <a href="/config" class="{{ 'active' if active_nav == 'config' else '' }}">Config</a>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

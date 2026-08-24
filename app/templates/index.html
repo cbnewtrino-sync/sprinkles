@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Sprinkles - Zones{% endblock %}
+
+{% block strip_reading %}
+  {% if active_zone %}RUNNING &middot; {{ active_zone }}{% else %}SYSTEM IDLE{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>Zones</h2>
+<div id="zone-list" class="zone-list"
+     hx-get="/zones/list"
+     hx-trigger="every 5s"
+     hx-swap="innerHTML">
+  {% include "partials/zone_list.html" %}
+</div>
+{% endblock %}

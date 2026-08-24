@@ -1,0 +1,10 @@
+{
+  "waterTOD": "03:00",
+  "delayDay": null,
+  "zoneGroup": [
+    {"name": "SOUTH", "enabled": true, "pin": 1, "interval": 3, "duration": 10, "lastRun": null},
+    {"name": "NORTH", "enabled": true, "pin": 2, "interval": 3, "duration": 10, "lastRun": null},
+    {"name": "BACK",  "enabled": true, "pin": 3, "interval": 3, "duration": 10, "lastRun": null},
+    {"name": "FRONT", "enabled": true, "pin": 4, "interval": 3, "duration": 10, "lastRun": null}
+  ]
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Sprinkles - Config{% endblock %}
+{% block strip_reading %}CONFIG{% endblock %}
+
+{% block content %}
+<h2>Zones</h2>
+<div id="zone-editor" class="zone-editor">
+  {% include "partials/zone_editor.html" %}
+</div>
+
+<h2>Schedule</h2>
+<div id="settings" class="settings-panel">
+  {% include "partials/settings.html" %}
+</div>
+{% endblock %}
