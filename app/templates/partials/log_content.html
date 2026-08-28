@@ -1,0 +1,5 @@
+{% if content %}
+<pre class="log-text">{{ content }}</pre>
+{% else %}
+<p class="log-empty">No log entries for {{ day.strftime('%A, %B %-d') }}.</p>
+{% endif %}

@@ -22,6 +22,7 @@
   <nav class="nav-row">
     <a href="/" class="{{ 'active' if active_nav == 'status' else '' }}">Status</a>
     <a href="/config" class="{{ 'active' if active_nav == 'config' else '' }}">Config</a>
+    <a href="/log" class="{{ 'active' if active_nav == 'log' else '' }}">Log</a>
   </nav>
   <main>
     {% block content %}{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Sprinkles - Log{% endblock %}
+{% block strip_reading %}LOG{% endblock %}
+
+{% block content %}
+<h2>Activity Log</h2>
+
+<div class="log-day-picker">
+  {% for d in days %}
+    <button
+      class="{{ 'active' if d == selected_day else '' }}"
+      hx-get="/log/day/{{ d.isoformat() }}"
+      hx-target="#log-content"
+      hx-swap="innerHTML">
+      {{ d.strftime('%a %-m/%-d') }}
+    </button>
+  {% endfor %}
+</div>
+
+<div id="log-content">
+  {% include "partials/log_content.html" %}
+</div>
+{% endblock %}

@@ -296,3 +296,44 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   text-transform: none;
   letter-spacing: normal;
 }
+
+/* --- Log page --- */
+.log-day-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.log-day-picker button {
+  background: var(--surface);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.log-day-picker button.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.log-text {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+.log-empty {
+  color: var(--ink-soft);
+  font-style: italic;
+}

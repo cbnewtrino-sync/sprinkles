@@ -23,6 +23,7 @@ from app.config import load_config
 from app.logging_config import configure_logging
 from app.relay import RelayController
 from app.routes import config as config_routes
+from app.routes import log as log_routes
 from app.routes import pages, zones
 from app.scheduler import run_forever
 
@@ -55,6 +56,7 @@ app = FastAPI(title="Sprinkles", lifespan=lifespan)
 app.include_router(pages.router)
 app.include_router(zones.router)
 app.include_router(config_routes.router)
+app.include_router(log_routes.router)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
