@@ -6,19 +6,7 @@
 {% block content %}
 <h2>Activity Log</h2>
 
-<div class="log-day-picker">
-  {% for d in days %}
-    <button
-      class="{{ 'active' if d == selected_day else '' }}"
-      hx-get="/log/day/{{ d.isoformat() }}"
-      hx-target="#log-content"
-      hx-swap="innerHTML">
-      {{ d.strftime('%a %-m/%-d') }}
-    </button>
-  {% endfor %}
-</div>
-
-<div id="log-content">
-  {% include "partials/log_content.html" %}
+<div id="log-panel">
+  {% include "partials/log_panel.html" %}
 </div>
 {% endblock %}

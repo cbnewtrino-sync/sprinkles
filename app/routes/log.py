@@ -66,5 +66,12 @@ async def log_day(iso_date: str, request: Request):
         raise HTTPException(status_code=400, detail="Invalid date")
 
     return templates.TemplateResponse(
-        request, "partials/log_content.html", {"day": day, "content": _read_day(day)}
+        request,
+        "partials/log_panel.html",
+        {
+            "days": _last_n_days(DAYS_TO_SHOW),
+            "selected_day": day,
+            "day": day,
+            "content": _read_day(day),
+        },
     )

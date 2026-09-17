@@ -1,0 +1,15 @@
+<div class="log-day-picker">
+  {% for d in days %}
+    <button
+      class="{{ 'active' if d == selected_day else '' }}"
+      hx-get="/log/day/{{ d.isoformat() }}"
+      hx-target="#log-panel"
+      hx-swap="innerHTML">
+      {{ d.strftime('%a %-m/%-d') }}
+    </button>
+  {% endfor %}
+</div>
+
+<div id="log-content">
+  {% include "partials/log_content.html" %}
+</div>

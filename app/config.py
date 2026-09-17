@@ -51,7 +51,7 @@ class SprinklerConfig(BaseModel):
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
     def is_delayed(self, today: date) -> bool:
-        return self.delay_day is not None and today <= self.delay_day
+        return self.delay_day is not None and today < self.delay_day
 
     def due_zones(self, today: date) -> list[Zone]:
         """Zones eligible for today's automatic cycle, in config order."""
