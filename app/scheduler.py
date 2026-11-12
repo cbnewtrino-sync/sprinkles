@@ -78,7 +78,12 @@ async def run_forever(
         now = datetime.now()
         trigger = next_trigger_time(config, now)
 
-        wait_seconds = (trigger - now).total_seconds()
+        # Subtract POSIX timestamps, not the naive datetimes themselves:
+        # naive subtraction measures wall-clock difference, which is an
+        # hour off whenever the wait spans a DST change (on 2026-11-01 it
+        # woke at 02:00 instead of 03:00). .timestamp() on a naive
+        # datetime goes through mktime() and honors the local zone.
+        wait_seconds = trigger.timestamp() - now.timestamp()
         if wait_seconds > 0:
             logger.info("Next watering cycle at %s (%.0f min from now)", trigger, wait_seconds / 60)
             await asyncio.sleep(wait_seconds)

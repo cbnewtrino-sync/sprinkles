@@ -1,11 +1,10 @@
 """
 Log viewing. Reads directly from the same files logging_config.py writes
 -- no separate log storage, no duplication. Today's entries live in the
-active file (no suffix); prior days live in files TimedRotatingFileHandler
+active file (no suffix); prior days live in files the handler
 rotates to at midnight, suffixed with the date of the content they hold
-(confirmed against the stdlib source: the suffix is computed from
-rolloverAt - interval, i.e. the day that just ended, not the moment
-rollover happened to fire).
+(DailyRotatingFileHandler names each file for the day that just ended,
+not the moment rollover happened to fire).
 """
 from __future__ import annotations
 

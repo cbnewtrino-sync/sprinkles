@@ -21,6 +21,10 @@ will need WorkingDirectory set to match, for the same reason.
 from __future__ import annotations
 
 import logging
+import os
+import time
+from datetime import datetime, timedelta
+from datetime import time as dtime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
@@ -32,6 +36,54 @@ FORMAT = "%(asctime)s %(levelname)-8s %(name)s: %(message)s"
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
+class DailyRotatingFileHandler(TimedRotatingFileHandler):
+    """Midnight rotation that stays correct across DST changes.
+
+    The stdlib handler has two flaws that combine badly on the night DST
+    ends (fall back), when the first record after midnight is written
+    after 2 AM -- which, with a 3 AM watering schedule, is every year:
+
+      1. doRollover() names the rotated file from rolloverAt - 86400 and
+         then "corrects" by an hour if DST differs between *now* and that
+         moment. On fall-back night that shifts the name back a full day,
+         onto a file that already exists.
+      2. Seeing that file exists, it returns early ("already rolled
+         over") *without* advancing rolloverAt -- so every later record
+         retries the same doomed rollover, and rotation stops for good
+         until the process restarts. (Seen in production 2026-11-01.)
+
+    The fixes: compute the next midnight with calendar arithmetic rather
+    than "+86400 seconds", name the file for the wall-clock day one
+    second before the rollover (always the day that just ended, no DST
+    correction needed), and advance rolloverAt before any early return.
+    Only valid for when="midnight", which is all this app uses.
+    """
+
+    def computeRollover(self, currentTime):
+        today = datetime.fromtimestamp(currentTime).date()
+        return int(datetime.combine(today + timedelta(days=1), dtime()).timestamp())
+
+    def doRollover(self):
+        day_ended = time.localtime(self.rolloverAt - 1)
+        dfn = self.rotation_filename(
+            f"{self.baseFilename}.{time.strftime(self.suffix, day_ended)}"
+        )
+        # Advance first, so nothing below can leave us retrying forever.
+        self.rolloverAt = self.computeRollover(int(time.time()))
+        if os.path.exists(dfn):
+            return  # already rotated (e.g. a restart raced midnight)
+
+        if self.stream:
+            self.stream.close()
+            self.stream = None
+        self.rotate(self.baseFilename, dfn)
+        if self.backupCount > 0:
+            for old in self.getFilesToDelete():
+                os.remove(old)
+        if not self.delay:
+            self.stream = self._open()
+
+
 def configure_logging() -> None:
     LOG_DIR.mkdir(exist_ok=True)
 
@@ -40,7 +92,7 @@ def configure_logging() -> None:
     console = logging.StreamHandler()
     console.setFormatter(formatter)
 
-    file_handler = TimedRotatingFileHandler(
+    file_handler = DailyRotatingFileHandler(
         LOG_FILE, when="midnight", backupCount=BACKUP_DAYS
     )
     file_handler.setFormatter(formatter)
